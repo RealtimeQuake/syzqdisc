@@ -1,5 +1,12 @@
 arches = 386, amd64, arm, arm64, mips64le, ppc64le, riscv64, s390x
 
+TCA_ETS_NBANDS = 1
+TCA_ETS_NSTRICT = 2
+TCA_ETS_QUANTA = 3
+TCA_ETS_QUANTA_BAND = 4
+TCA_ETS_PRIOMAP = 5
+TCA_ETS_PRIOMAP_BAND = 6
+
 Q_CAKE = 1
 Q_CBS = 2
 Q_NETEM = 15
