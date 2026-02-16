@@ -60,7 +60,7 @@ syz_addqdic_root(opts ptr [inout, list_addqdisc], size len[opts])
 
 syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [inout, list_addqdisc], size len[opts])
 
-syz_addclass(opts ptr[in, list_addclass], size len[opts])
+syz_addclass(opts ptr[inout, list_addclass], size len[opts])
 
 
 syz_changeqdisc(opts ptr[in, list_changeqdisc], size len[opts])
@@ -93,37 +93,42 @@ list_parent [
 #using struct and random select for bypass union produce resource limitations
 list_addqdisc {
 	q_random 	int64[1:12]
-	q_cake  	add_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enhanced_cake_policy]] 	(if[value[q_random] == 1])
-	q_cbs  	 	add_opt_t[Q_CBS, 	handle_qdisc_cbs, 	enhanced_cbs_policy]			(if[value[q_random] == 2])
-	q_netem		add_opt_t[Q_NETEM,	handle_qdisc_netem, enhanced_tc_netem_message]		(if[value[q_random] == 3])
-	q_red		add_opt_t[Q_RED,	handle_qdisc_red,	array[enhanced_red_policy]]		(if[value[q_random] == 4])
-	q_sfb   	add_opt_t[Q_SFB,	handle_qdisc_sfb,   enhanced_sfb_policy]			(if[value[q_random] == 5])
-	q_tbf       add_opt_t[Q_TBF,    handle_qdisc_tbf, 	array[enhanced_tbf_policy]]		(if[value[q_random] == 6])
-	q_drr       add_opt_t[Q_DRR,	handle_qdisc_drr,   const[0, int64]]				(if[value[q_random] == 7])
-	q_ets 		add_opt_t[Q_ETS,	handle_qdisc_ets,	array[enhanced_ets_policy]]		(if[value[q_random] == 8])
-	q_hfsc		add_opt_t[Q_HFSC,   handle_qdisc_hfsc,  enhanced_hfsc_policy]			(if[value[q_random] == 9])
-	q_htb		add_opt_t[Q_HTB,	handle_qdisc_htb,	array[enhanced_htb_policy]]		(if[value[q_random] == 10])
-	q_prio		add_opt_t[Q_PRIO,   handle_qdisc_prio,  enhanced_tc_prio_qopt]			(if[value[q_random] == 11])
-	q_qfq		add_opt_t[Q_QFQ,	handle_qdisc_qfq,	const[0, int64]] 				(if[value[q_random] == 12])
+	q_cake  	addqdisc_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enhanced_cake_policy]] 	(if[value[q_random] == 1])
+	q_cbs  	 	addqdisc_opt_t[Q_CBS, 	handle_qdisc_cbs, 	enhanced_cbs_policy]			(if[value[q_random] == 2])
+	q_netem		addqdisc_opt_t[Q_NETEM,	handle_qdisc_netem, enhanced_tc_netem_message]		(if[value[q_random] == 3])
+	q_red		addqdisc_opt_t[Q_RED,	handle_qdisc_red,	array[enhanced_red_policy]]		(if[value[q_random] == 4])
+	q_sfb   	addqdisc_opt_t[Q_SFB,	handle_qdisc_sfb,   enhanced_sfb_policy]			(if[value[q_random] == 5])
+	q_tbf       addqdisc_opt_t[Q_TBF,    handle_qdisc_tbf, 	array[enhanced_tbf_policy]]		(if[value[q_random] == 6])
+	q_drr       addqdisc_opt_t[Q_DRR,	handle_qdisc_drr,   const[0, int64]]				(if[value[q_random] == 7])
+	q_ets 		addqdisc_opt_t[Q_ETS,	handle_qdisc_ets,	array[enhanced_ets_policy]]		(if[value[q_random] == 8])
+	q_hfsc		addqdisc_opt_t[Q_HFSC,   handle_qdisc_hfsc,  enhanced_hfsc_policy]			(if[value[q_random] == 9])
+	q_htb		addqdisc_opt_t[Q_HTB,	handle_qdisc_htb,	array[enhanced_htb_policy]]		(if[value[q_random] == 10])
+	q_prio		addqdisc_opt_t[Q_PRIO,   handle_qdisc_prio,  enhanced_tc_prio_qopt]			(if[value[q_random] == 11])
+	q_qfq		addqdisc_opt_t[Q_QFQ,	handle_qdisc_qfq,	const[0, int64]] 				(if[value[q_random] == 12])
 	q_error     const[0xdeadbeafdeadbeaf, int64]
 } [packed, align[8]] 
 
+type addqdisc_opt_t[TYPE, HANDLE, OPTS] {
+	q_type const[TYPE, int64]
+	handle HANDLE (out)
+	opts   OPTS
+}
 
 # add class port list and addclass opts
 list_addclass {
 	q_random 	int64[1:6]
-	c_drr 	add_opt_t[Q_DRR,  handle_class_drr, 	enhanced_drr_policy]				(if[value[q_random] == 1])
-	c_ets 	add_opt_t[Q_ETS,  handle_class_ets, 	const[0, int64]]					(if[value[q_random] == 2])
-	c_hfsc 	add_opt_t[Q_HFSC, handle_class_hfsc, 	array[enhanced_hfsc_policy]]		(if[value[q_random] == 3])
-	c_htb   add_opt_t[Q_HTB,  handle_class_htb, 	array[enhanced_htb_policy]]			(if[value[q_random] == 4])
-	c_prio  add_opt_t[Q_PRIO, handle_class_prio, 	const[0, int64]]					(if[value[q_random] == 5])
-	c_qfq   add_opt_t[Q_QFQ,  handle_class_qfq,		array[enhanced_qfq_policy]]			(if[value[q_random] == 6])
+	c_drr 	addclass_opt_t[Q_DRR,	handle_qdisc_drr,  	handle_class_drr, 	enhanced_drr_policy]				(if[value[q_random] == 1])
+	c_ets 	addclass_opt_t[Q_ETS, 	handle_qdisc_ets,	handle_class_ets, 	const[0, int64]]					(if[value[q_random] == 2])
+	c_hfsc 	addclass_opt_t[Q_HFSC, 	handle_qdisc_hfsc,	handle_class_hfsc, 	array[enhanced_hfsc_policy]]		(if[value[q_random] == 3])
+	c_htb   addclass_opt_t[Q_HTB,  	handle_qdisc_htb,	handle_class_htb, 	array[enhanced_htb_policy]]			(if[value[q_random] == 4])
+	c_prio  addclass_opt_t[Q_PRIO, 	handle_qdisc_prio,	handle_class_prio, 	const[0, int64]]					(if[value[q_random] == 5])
+	c_qfq   addclass_opt_t[Q_QFQ, 	handle_qdisc_qfq,  	handle_class_qfq,   array[enhanced_qfq_policy]]			(if[value[q_random] == 6])
 	q_error     const[0xdeadbeafdeadbeaf, int64]
 } [packed, align[8]] 
 
-
-type add_opt_t[TYPE, HANDLE, OPTS] {
+type addclass_opt_t[TYPE, PORT_HANDLE, HANDLE, OPTS] {
 	q_type const[TYPE, int64]
+	port_handle PORT_HANDLE (in)
 	handle HANDLE (out)
 	opts   OPTS
 }
