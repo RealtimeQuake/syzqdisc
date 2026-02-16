@@ -56,6 +56,8 @@ resource handle_class_prio[int64]
 resource handle_class_qfq[int64]
 
 
+syz_addqdic_root(opts ptr [inout, list_addqdisc], size len[opts])
+
 syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [inout, list_addqdisc], size len[opts])
 
 syz_addclass(opts ptr[in, list_addclass], size len[opts])
@@ -88,19 +90,42 @@ list_parent [
 	q_qfq 	handle_class_qfq	
 ]
 
-list_addqdisc [
-	q_cake  ret_handle	
-] [varlen]
+#using struct and random select for bypass union produce resource limitations
+list_addqdisc {
+	q_random 	int64[2:12]
+	q_cake  	add_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enhanced_cake_policy]] 	
+	q_cbs  	 	add_opt_t[Q_CBS, 	handle_qdisc_cbs, 	enhanced_cbs_policy]			(if[value[q_random] == 2])
+	q_netem		add_opt_t[Q_NETEM,	handle_qdisc_netem, enhanced_tc_netem_message]		(if[value[q_random] == 3])
+	q_red		add_opt_t[Q_RED,	handle_qdisc_red,	array[enhanced_red_policy]]		(if[value[q_random] == 4])
+	q_sfb   	add_opt_t[Q_SFB,	handle_qdisc_sfb,   enhanced_sfb_policy]			(if[value[q_random] == 5])
+	q_tbf       add_opt_t[Q_TBF,    handle_qdisc_tbf, 	array[enhanced_tbf_policy]]		(if[value[q_random] == 6])
+	q_drr       add_opt_t[Q_DRR,	handle_qdisc_drr,   const[0, int64]]				(if[value[q_random] == 7])
+	q_ets 		add_opt_t[Q_ETS,	handle_qdisc_ets,	array[enhanced_ets_policy]]		(if[value[q_random] == 8])
+	q_hfsc		add_opt_t[Q_HFSC,   handle_qdisc_hfsc,  enhanced_hfsc_policy]			(if[value[q_random] == 9])
+	q_htb		add_opt_t[Q_HTB,	handle_qdisc_htb,	array[enhanced_htb_policy]]		(if[value[q_random] == 10])
+	q_prio		add_opt_t[Q_PRIO,   handle_qdisc_prio,  enhanced_tc_prio_qopt]			(if[value[q_random] == 11])
+	q_qfq		add_opt_t[Q_QFQ,	handle_qdisc_qfq,	const[0, int64]] 				(if[value[q_random] == 12])
+} [packed, align[8]] 
 
 
 # add class port list and addclass opts
-list_addclass [
-	q_test int64
-] [varlen]
+list_addclass {
+	q_random 	int64[2:12]
+	c_drr 	add_opt_t[Q_DRR,  handle_class_drr, 	enhanced_drr_policy]
+	c_ets 	add_opt_t[Q_ETS,  handle_class_ets, 	const[0, int64]]
+	c_hfsc 	add_opt_t[Q_HFSC, handle_class_hfsc, 	array[enhanced_hfsc_policy]]
+	c_htb   add_opt_t[Q_HTB,  handle_class_htb, 	array[enhanced_htb_policy]]
+	c_prio  add_opt_t[Q_PRIO, handle_class_prio, 	const[0, int64]]
+	c_qfq   add_opt_t[Q_QFQ,  handle_class_qfq,		array[enhanced_qfq_policy]]
+} [packed, align[8]] 
 
-ret_handle {
-	q_cake handle_qdisc_cake (out)
+
+type add_opt_t[TYPE, HANDLE, OPTS] {
+	q_type const[TYPE, int64]
+	handle HANDLE (out)
+	opts   OPTS
 }
+
 
 # change qdisc and class ops list
 list_changeqdisc [
@@ -307,14 +332,14 @@ enhanced_tc_htb_glob {
 	direct_pkts	const[0, int32]
 }
 
-enhanced_tc_netem_qopt {
-	latency		int32
-	limit		int32
-	loss		int32
-	gap		int32
-	duplicate	int32
-	jitter		int32
-}
+# enhanced_tc_netem_qopt {
+# 	latency		int32
+# 	limit		int32
+# 	loss		int32
+# 	gap		int32
+# 	duplicate	int32
+# 	jitter		int32
+# }
 
 enhanced_tc_netem_corr {
 	delay_corr	int32
@@ -382,38 +407,6 @@ enhanced_tc_sfb_qopt {
 	penalty_burst	int32
 }
 
-enhanced_tc_sfq_qopt_v1 {
-	v0		tc_sfq_qopt
-	depth		int32
-	headdrop	int32[0:1]
-	limit		int32
-	qth_min		int32
-	qth_max		int32
-	Wlog		int8[0:32]
-	Plog		int8[0:32]
-	Scell_log	int8[0:32]
-	flag		int8[0:8]
-	max_P		int32
-	stats		enhanced_tc_sfqred_stats
-}
-
-enhanced_tc_sfq_qopt {
-	quantum		int32
-	perturb_period	int32
-	limit		int32
-	divisor		int32
-	flows		int32
-}
-
-enhanced_tc_sfqred_stats {
-	prob_drop		int32
-	forced_drop		int32
-	prob_mark		int32
-	forced_mark		int32
-	prob_mark_head		int32
-	forced_mark_head	int32
-}
-
 enhanced_tc_tbf_qopt {
 	rate		enhanced_tc_ratespec
 	peakrate	enhanced_tc_ratespec
@@ -433,7 +426,7 @@ enhanced_ets_policy$class [
 ] [varlen]
 
 enhanced_htb_policy$class [
-	TCA_HTB_PARMS	nlattr[TCA_HTB_PARMS, tc_htb_opt]
+	TCA_HTB_PARMS	nlattr[TCA_HTB_PARMS, enhanced_tc_htb_opt]
 	TCA_HTB_CTAB	nlattr[TCA_HTB_CTAB, array[int32, 256]]
 	TCA_HTB_RTAB	nlattr[TCA_HTB_RTAB, array[int32, 256]]
 	TCA_HTB_RATE64	nlattr[TCA_HTB_RATE64, int64]
@@ -464,27 +457,6 @@ enhanced_tc_ratespec {
 	cell_align	int16
 	mpu		int16
 	rate		int32
-}
-
-enhanced_tc_estimator {
-	interval	int8
-	ewma_log	int8
-}
-
-enhanced_stab_policy {
-	TCA_STAB_BASE	nlattr[TCA_STAB_BASE, enhanced_tc_sizespec]
-	TCA_STAB_DATA	nlattr[TCA_STAB_DATA, array[int16]]
-} [packed]
-
-enhanced_tc_sizespec {
-	cell_log	int8
-	size_log	int8
-	cell_align	int16
-	overhead	int32
-	linklayer	flags[enhanced_linklayer, int32]
-	mpu		int32
-	mtu		int32
-	tsize		len[stab_policy:TCA_STAB_DATA:payload, int32]
 }
 
 # ----------- flags -------------
