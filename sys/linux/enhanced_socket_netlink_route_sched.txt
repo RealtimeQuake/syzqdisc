@@ -32,6 +32,7 @@ include <uapi/linux/tc_ematch/tc_em_cmp.h>
 include <uapi/linux/tc_ematch/tc_em_ipt.h>
 include <uapi/linux/tc_ematch/tc_em_meta.h>
 
+# qdisc handle
 resource handle_qdisc_cake[int64]
 resource handle_qdisc_cbs[int64]
 resource handle_qdisc_netem[int64]
@@ -46,12 +47,43 @@ resource handle_qdisc_htb[int64]
 resource handle_qdisc_prio[int64]
 resource handle_qdisc_qfq[int64]
 
+# class handle
 resource handle_class_drr[int64]
 resource handle_class_ets[int64]
 resource handle_class_hfsc[int64]
 resource handle_class_htb[int64]
 resource handle_class_prio[int64]
 resource handle_class_qfq[int64]
+
+
+
+syz_delqdisc(handle ptr[in, list_del_qdisc])
+
+syz_delclass(handle ptr[in, list_del_class])
+
+
+list_del_qdisc [
+	q_cake 	handle_qdisc_cake
+	q_cbs  	handle_qdisc_cbs
+	q_netem handle_qdisc_netem
+	q_red 	handle_qdisc_red
+	q_sfb 	handle_qdisc_sfb
+	q_tbf 	handle_qdisc_tbf
+	q_drr 	handle_qdisc_drr
+	q_ets 	handle_qdisc_ets
+	q_hfsc 	handle_qdisc_hfsc
+	q_htb 	handle_qdisc_htb
+	q_prio 	handle_qdisc_prio
+	q_qfq 	handle_qdisc_qfq	
+]
+
+# prio and ets is not delable
+list_del_class [
+	c_drr 	handle_class_drr
+	c_hfsc 	handle_class_hfsc
+	c_htb 	handle_class_htb
+	c_qfq 	handle_class_qfq
+]
 
 
 # ------------------------------ tc qdisc ------------------------------
