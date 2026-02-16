@@ -58,11 +58,13 @@ resource handle_class_qfq[int64]
 
 syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [in, list_addqdisc], size len[opts])
 
-syz_addclass(handle_port ptr[in, list_classqdisc], opts ptr [in, list_addclass], size len[opts])
+syz_addclass(handle_port ptr[in, list_addclass], size len[opts])
+
 
 syz_changeqdisc(opts ptr[in, list_changeqdisc], size len[opts])
 
 syz_changeclass(opts ptr[in, list_changeclass], size len[ops])
+
 
 syz_delqdisc(handle ptr[in, list_del_qdisc])
 
@@ -90,8 +92,9 @@ list_addqdisc [
 	
 ]
 
+
 # add class port list and addclass opts
-list_classqdisc [
+list_addclass [
 	q_drr 	handle_qdisc_drr
 	q_ets 	handle_qdisc_ets
 	q_hfsc 	handle_qdisc_hfsc
@@ -100,18 +103,34 @@ list_classqdisc [
 	q_qfq 	handle_qdisc_qfq	
 ]
 
-list_addclass [
-	
-]
 
 # change qdisc and class ops list
 list_changeqdisc [
-	
-]
+	q_cake  change_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[cake_policy]]
+	q_cbs 	change_opt_t[Q_CBS,  	handle_qdisc_cbs,  	cbs_policy]
+	q_netem change_opt_t[Q_NETEM,	handle_qdisc_netem, tc_netem_message]
+	q_red   change_opt_t[Q_RED, 	handle_qdisc_red,	array[red_policy]]
+	q_sfb   change_opt_t[Q_SFB,		handle_qdisc_sfb,	sfb_policy]
+	q_tbf   change_opt_t[Q_TBF,		handle_qdisc_tbf,   array[tbf_policy]]
+	q_ets   change_opt_t[Q_ETS,		handle_qdisc_ets,	array[ets_policy]]
+	q_hfsc  change_opt_t[Q_HFSC,	handle_qdisc_hfsc, 	hfsc_policy]
+	q_htb 	change_opt_t[Q_HTB, 	handle_qdisc_htb,	array[htb_policy]]
+	q_prio  change_opt_t[Q_PRIO,    handle_qdisc_prio,  tc_prio_qopt]
+] [varlen]
 
 list_changeclass [
-	
-]
+	c_drr 	change_opt_t[Q_DRR,	 handle_class_drr,	drr_policy]
+	c_ets 	change_opt_t[Q_ETS,	 handle_class_ets, 	ets_policy$class]
+	c_hfsc	change_opt_t[Q_HFSC, handle_class_hfsc, array[hfsc_policy]]
+	c_htb   change_opt_t[Q_HTB,	 handle_class_htb,  array[htb_policy$class]]
+	c_qfq   change_opt_t[Q_QFQ,  handle_class_qfq,  array[qfq_policy]]
+] [varlen]
+
+type change_opt_t[TYPE, HANDLE, OPTS] {
+	q_type TYPE
+	handle HANDLE (in)
+	opts   OPTS
+}
 
 # del lists qdisc and class
 list_del_qdisc [
@@ -137,15 +156,22 @@ list_del_class [
 	c_qfq 	handle_class_qfq
 ]
 
+
 # list of class for send in priority
 list_sendprio [
-	c_drr  handle_class_drr
-	c_ets  handle_class_ets
-    c_hfsc handle_class_hfsc
-	c_htb  handle_class_htb
-	c_prio handle_class_prio
-	c_qfq  handle_class_qfq
+	q_cbs  	handle_qdisc_cbs
+	q_netem handle_qdisc_netem
+	q_red 	handle_qdisc_red
+	q_sfb 	handle_qdisc_sfb
+	q_tbf 	handle_qdisc_tbf
+	c_drr   handle_class_drr
+	c_ets   handle_class_ets
+    c_hfsc  handle_class_hfsc
+	c_htb   handle_class_htb
+	c_prio  handle_class_prio
+	c_qfq   handle_class_qfq
 ]
+
 
 
 # ------------------------------ tc qdisc ------------------------------
