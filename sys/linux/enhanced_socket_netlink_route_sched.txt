@@ -89,20 +89,18 @@ list_parent [
 ]
 
 list_addqdisc [
-	
-]
+	q_cake  ret_handle	
+] [varlen]
 
 
 # add class port list and addclass opts
 list_addclass [
-	q_drr 	handle_qdisc_drr
-	q_ets 	handle_qdisc_ets
-	q_hfsc 	handle_qdisc_hfsc
-	q_htb 	handle_qdisc_htb
-	q_prio 	handle_qdisc_prio
-	q_qfq 	handle_qdisc_qfq	
-]
+	q_test int64
+] [varlen]
 
+ret_handle {
+	q_cake handle_qdisc_cake (out)
+}
 
 # change qdisc and class ops list
 list_changeqdisc [
@@ -157,7 +155,7 @@ list_del_class [
 ]
 
 
-# list of class for send in priority
+# list of class and halfclass for send in priority
 list_sendprio [
 	q_cbs  	handle_qdisc_cbs
 	q_netem handle_qdisc_netem

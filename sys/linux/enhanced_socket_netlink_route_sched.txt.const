@@ -1,0 +1,12 @@
+Q_CAKE = 1
+Q_CBS = 2
+Q_NETEM = 15
+Q_RED = 19
+Q_SFB = 20
+Q_TBF = 23
+Q_DRR = 25
+Q_ETS = 6
+Q_HFSC = 30
+Q_HTB = 29
+Q_PRIO = 17
+Q_QFQ = 28
