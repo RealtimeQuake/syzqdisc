@@ -92,8 +92,8 @@ list_parent [
 
 #using struct and random select for bypass union produce resource limitations
 list_addqdisc {
-	q_random 	int64[2:12]
-	q_cake  	add_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enhanced_cake_policy]] 	
+	q_random 	int64[1:12]
+	q_cake  	add_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enhanced_cake_policy]] 	(if[value[q_random] == 1])
 	q_cbs  	 	add_opt_t[Q_CBS, 	handle_qdisc_cbs, 	enhanced_cbs_policy]			(if[value[q_random] == 2])
 	q_netem		add_opt_t[Q_NETEM,	handle_qdisc_netem, enhanced_tc_netem_message]		(if[value[q_random] == 3])
 	q_red		add_opt_t[Q_RED,	handle_qdisc_red,	array[enhanced_red_policy]]		(if[value[q_random] == 4])
@@ -105,18 +105,20 @@ list_addqdisc {
 	q_htb		add_opt_t[Q_HTB,	handle_qdisc_htb,	array[enhanced_htb_policy]]		(if[value[q_random] == 10])
 	q_prio		add_opt_t[Q_PRIO,   handle_qdisc_prio,  enhanced_tc_prio_qopt]			(if[value[q_random] == 11])
 	q_qfq		add_opt_t[Q_QFQ,	handle_qdisc_qfq,	const[0, int64]] 				(if[value[q_random] == 12])
+	q_error     const[0xdeadbeafdeadbeaf, int64]
 } [packed, align[8]] 
 
 
 # add class port list and addclass opts
 list_addclass {
-	q_random 	int64[2:12]
-	c_drr 	add_opt_t[Q_DRR,  handle_class_drr, 	enhanced_drr_policy]
-	c_ets 	add_opt_t[Q_ETS,  handle_class_ets, 	const[0, int64]]
-	c_hfsc 	add_opt_t[Q_HFSC, handle_class_hfsc, 	array[enhanced_hfsc_policy]]
-	c_htb   add_opt_t[Q_HTB,  handle_class_htb, 	array[enhanced_htb_policy]]
-	c_prio  add_opt_t[Q_PRIO, handle_class_prio, 	const[0, int64]]
-	c_qfq   add_opt_t[Q_QFQ,  handle_class_qfq,		array[enhanced_qfq_policy]]
+	q_random 	int64[1:6]
+	c_drr 	add_opt_t[Q_DRR,  handle_class_drr, 	enhanced_drr_policy]				(if[value[q_random] == 1])
+	c_ets 	add_opt_t[Q_ETS,  handle_class_ets, 	const[0, int64]]					(if[value[q_random] == 2])
+	c_hfsc 	add_opt_t[Q_HFSC, handle_class_hfsc, 	array[enhanced_hfsc_policy]]		(if[value[q_random] == 3])
+	c_htb   add_opt_t[Q_HTB,  handle_class_htb, 	array[enhanced_htb_policy]]			(if[value[q_random] == 4])
+	c_prio  add_opt_t[Q_PRIO, handle_class_prio, 	const[0, int64]]					(if[value[q_random] == 5])
+	c_qfq   add_opt_t[Q_QFQ,  handle_class_qfq,		array[enhanced_qfq_policy]]			(if[value[q_random] == 6])
+	q_error     const[0xdeadbeafdeadbeaf, int64]
 } [packed, align[8]] 
 
 
