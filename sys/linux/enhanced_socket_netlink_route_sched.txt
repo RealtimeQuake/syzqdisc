@@ -32,7 +32,26 @@ include <uapi/linux/tc_ematch/tc_em_cmp.h>
 include <uapi/linux/tc_ematch/tc_em_ipt.h>
 include <uapi/linux/tc_ematch/tc_em_meta.h>
 
+resource handle_qdisc_cake[int64]
+resource handle_qdisc_cbs[int64]
+resource handle_qdisc_netem[int64]
+resource handle_qdisc_red[int64]
+resource handle_qdisc_sfb[int64]
+resource handle_qdisc_tbf[int64]
 
+resource handle_qdisc_drr[int64]
+resource handle_qdisc_ets[int64]
+resource handle_qdisc_hfsc[int64]
+resource handle_qdisc_htb[int64]
+resource handle_qdisc_prio[int64]
+resource handle_qdisc_qfq[int64]
+
+resource handle_class_drr[int64]
+resource handle_class_ets[int64]
+resource handle_class_hfsc[int64]
+resource handle_class_htb[int64]
+resource handle_class_prio[int64]
+resource handle_class_qfq[int64]
 
 
 # ------------------------------ tc qdisc ------------------------------
@@ -154,33 +173,6 @@ tc_red_qopt {
 	Plog		int8[0:32]
 	Scell_log	int8[0:32]
 	flag		int8[0:8]
-}
-
-tc_gred_sopt {
-	DPs	int32[0:16]
-	def_DP	int32[0:16]
-	grio	int8[0:1]
-	flags	int8[0:8]
-	pad1	const[0, int16]
-}
-
-tc_gred_qopt {
-	limit		int32
-	qth_min		int32
-	qth_max		int32
-	DP		int32[0:16]
-	backlog		int32
-	qave		int32
-	forced		int32
-	early		int32
-	other		int32
-	pdrop		int32
-	Wlog		int8[0:32]
-	Plog		int8[0:32]
-	Scell_log	int8[0:32]
-	prio		int8
-	packets		int32
-	bytesin		int32
 }
 
 tc_htb_glob {
