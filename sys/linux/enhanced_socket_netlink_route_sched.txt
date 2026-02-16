@@ -1,0 +1,382 @@
+# Reworked Qdisc Config Unbounded Mesa 
+
+include <linux/net.h>
+include <linux/mpls.h>
+include <uapi/linux/if.h>
+include <uapi/linux/netlink.h>
+include <uapi/linux/rtnetlink.h>
+include <uapi/linux/netfilter.h>
+include <uapi/linux/netfilter/x_tables.h>
+include <uapi/linux/if_packet.h>
+include <uapi/linux/can.h>
+include <uapi/linux/pkt_cls.h>
+include <uapi/linux/pkt_sched.h>
+include <uapi/linux/tc_act/tc_bpf.h>
+include <uapi/linux/tc_act/tc_ct.h>
+include <uapi/linux/tc_act/tc_connmark.h>
+include <uapi/linux/tc_act/tc_csum.h>
+include <uapi/linux/tc_act/tc_ctinfo.h>
+include <uapi/linux/tc_act/tc_defact.h>
+include <uapi/linux/tc_act/tc_gact.h>
+include <uapi/linux/tc_act/tc_ife.h>
+include <uapi/linux/tc_act/tc_mirred.h>
+include <uapi/linux/tc_act/tc_mpls.h>
+include <uapi/linux/tc_act/tc_nat.h>
+include <uapi/linux/tc_act/tc_pedit.h>
+include <uapi/linux/tc_act/tc_sample.h>
+include <uapi/linux/tc_act/tc_skbedit.h>
+include <uapi/linux/tc_act/tc_skbmod.h>
+include <uapi/linux/tc_act/tc_tunnel_key.h>
+include <uapi/linux/tc_act/tc_vlan.h>
+include <uapi/linux/tc_ematch/tc_em_cmp.h>
+include <uapi/linux/tc_ematch/tc_em_ipt.h>
+include <uapi/linux/tc_ematch/tc_em_meta.h>
+
+
+
+
+# ------------------------------ tc qdisc ------------------------------
+
+cake_policy [
+	TCA_CAKE_BASE_RATE64	nlattr[TCA_CAKE_BASE_RATE64, int64]
+	TCA_CAKE_DIFFSERV_MODE	nlattr[TCA_CAKE_DIFFSERV_MODE, flags[tc_cake_diffserv_mode, int32]]
+	TCA_CAKE_ATM		nlattr[TCA_CAKE_ATM, flags[tc_cake_atm, int32]]
+	TCA_CAKE_FLOW_MODE	nlattr[TCA_CAKE_FLOW_MODE, flags[tc_cake_flow_mode, int32]]
+	TCA_CAKE_OVERHEAD	nlattr[TCA_CAKE_OVERHEAD, int32[-64:256]]
+	TCA_CAKE_RTT		nlattr[TCA_CAKE_RTT, int32]
+	TCA_CAKE_TARGET		nlattr[TCA_CAKE_TARGET, int32]
+	TCA_CAKE_AUTORATE	nlattr[TCA_CAKE_AUTORATE, int32]
+	TCA_CAKE_MEMORY		nlattr[TCA_CAKE_MEMORY, int32]
+	TCA_CAKE_NAT		nlattr[TCA_CAKE_NAT, int32[0:1]]
+	TCA_CAKE_RAW		nlattr[TCA_CAKE_RAW, int32[0:1]]
+	TCA_CAKE_WASH		nlattr[TCA_CAKE_WASH, int32[0:1]]
+	TCA_CAKE_MPU		nlattr[TCA_CAKE_MPU, int32[0:256]]
+	TCA_CAKE_INGRESS	nlattr[TCA_CAKE_INGRESS, int32[0:1]]
+	TCA_CAKE_ACK_FILTER	nlattr[TCA_CAKE_ACK_FILTER, flags[tc_cake_ack_filter, int32]]
+	TCA_CAKE_SPLIT_GSO	nlattr[TCA_CAKE_SPLIT_GSO, int32[0:1]]
+	TCA_CAKE_FWMARK		nlattr[TCA_CAKE_FWMARK, int32]
+] [varlen]
+
+cbs_policy [
+	TCA_CBS_PARMS	nlattr[TCA_CBS_PARMS, tc_cbs_qopt]
+] [varlen]
+
+# TODO: we should not have TCA_GRED_PARMS and TCA_GRED_STAB when do init
+gred_policy [
+	TCA_GRED_PARMS	nlattr[TCA_GRED_PARMS, tc_gred_qopt]
+	TCA_GRED_STAB	nlattr[TCA_GRED_STAB, array[int8, 256]]
+	TCA_GRED_DPS	nlattr[TCA_GRED_DPS, tc_gred_sopt]
+	TCA_GRED_MAX_P	nlattr[TCA_GRED_MAX_P, int32]
+	TCA_GRED_LIMIT	nlattr[TCA_GRED_LIMIT, int32]
+] [varlen]
+
+hfsc_policy [
+	TCA_HFSC_RSC	nlattr[TCA_HFSC_RSC, tc_service_curve]
+	TCA_HFSC_FSC	nlattr[TCA_HFSC_FSC, tc_service_curve]
+	TCA_HFSC_USC	nlattr[TCA_HFSC_USC, tc_service_curve]
+] [varlen]
+
+tc_service_curve {
+	m1	int32
+	d	int32
+	m2	int32
+}
+
+htb_policy [
+	TCA_HTB_INIT		nlattr[TCA_HTB_INIT, tc_htb_glob]
+	TCA_HTB_DIRECT_QLEN	nlattr[TCA_HTB_DIRECT_QLEN, int32]
+] [varlen]
+
+tc_netem_message {
+	qopt	tc_netem_qopt
+	attrs	array[netem_policy]
+}
+
+netem_policy [
+	TCA_NETEM_CORR		nlattr[TCA_NETEM_CORR, tc_netem_corr]
+	TCA_NETEM_DELAY_DIST	nlattr[TCA_NETEM_DELAY_DIST, array[int8, 0:100]]
+	TCA_NETEM_REORDER	nlattr[TCA_NETEM_REORDER, tc_netem_reorder]
+	TCA_NETEM_CORRUPT	nlattr[TCA_NETEM_CORRUPT, tc_netem_corrupt]
+	TCA_NETEM_LOSS		nlnest[TCA_NETEM_LOSS, array[netem_loss_policy]]
+	TCA_NETEM_RATE		nlattr[TCA_NETEM_RATE, tc_netem_rate]
+	TCA_NETEM_ECN		nlattr[TCA_NETEM_ECN, int32[0:1]]
+	TCA_NETEM_RATE64	nlattr[TCA_NETEM_RATE64, int64[0x100000000:0xffffffffffffffff]]
+	TCA_NETEM_LATENCY64	nlattr[TCA_NETEM_LATENCY64, int64]
+	TCA_NETEM_JITTER64	nlattr[TCA_NETEM_JITTER64, int64]
+	TCA_NETEM_SLOT		nlattr[TCA_NETEM_SLOT, tc_netem_slot]
+] [varlen]
+
+netem_loss_policy [
+	NETEM_LOSS_GI	nlattr[NETEM_LOSS_GI, tc_netem_gimodel]
+	NETEM_LOSS_GE	nlattr[NETEM_LOSS_GE, tc_netem_gemodel]
+] [varlen]
+
+red_policy [
+	TCA_RED_PARMS			nlattr[TCA_RED_PARMS, tc_red_qopt]
+	TCA_RED_STAB			nlattr[TCA_RED_STAB, array[int8, 256]]
+	TCA_RED_MAX_P			nlattr[TCA_RED_MAX_P, int32]
+	TCA_RED_FLAGS			nlattr[TCA_RED_FLAGS, nla_bitfield32[red_supported_flags]]
+	TCA_RED_EARLY_DROP_BLOCK	nlattr[TCA_RED_EARLY_DROP_BLOCK, int32]
+	TCA_RED_MARK_BLOCK		nlattr[TCA_RED_MARK_BLOCK, int32]
+] [varlen]
+
+red_supported_flags = TC_RED_HISTORIC_FLAGS, TC_RED_NODROP
+
+sfb_policy [
+	TCA_SFB_PARMS	nlattr[TCA_SFB_PARMS, tc_sfb_qopt]
+] [varlen]
+
+tbf_policy [
+	TCA_TBF_PARMS	nlattr[TCA_TBF_PARMS, tc_tbf_qopt]
+	TCA_TBF_RTAB	nlattr[TCA_TBF_RTAB, array[int32, 256]]
+	TCA_TBF_PTAB	nlattr[TCA_TBF_PTAB, array[int32, 256]]
+	TCA_TBF_RATE64	nlattr[TCA_TBF_RATE64, int64[0x100000000:0xffffffffffffffff]]
+	TCA_TBF_PRATE64	nlattr[TCA_TBF_PRATE64, int64[0x100000000:0xffffffffffffffff]]
+	TCA_TBF_BURST	nlattr[TCA_TBF_BURST, int32]
+	TCA_TBF_PBURST	nlattr[TCA_TBF_PBURST, int32[0:9000]]
+] [varlen]
+
+tc_cbs_qopt {
+	offload		int8
+	_pad		array[const[0, int8], 3]
+	hicredit	int32
+	locredit	int32
+	idleslope	int32
+	sendslope	int32
+}
+
+# NEED: limit >= qth_max >= qth_min
+tc_red_qopt {
+	limit		int32
+	qth_min		int32
+	qth_max		int32
+	Wlog		int8[0:32]
+	Plog		int8[0:32]
+	Scell_log	int8[0:32]
+	flag		int8[0:8]
+}
+
+tc_gred_sopt {
+	DPs	int32[0:16]
+	def_DP	int32[0:16]
+	grio	int8[0:1]
+	flags	int8[0:8]
+	pad1	const[0, int16]
+}
+
+tc_gred_qopt {
+	limit		int32
+	qth_min		int32
+	qth_max		int32
+	DP		int32[0:16]
+	backlog		int32
+	qave		int32
+	forced		int32
+	early		int32
+	other		int32
+	pdrop		int32
+	Wlog		int8[0:32]
+	Plog		int8[0:32]
+	Scell_log	int8[0:32]
+	prio		int8
+	packets		int32
+	bytesin		int32
+}
+
+tc_htb_glob {
+	version		const[3, int32]
+	rate2quantum	int32
+	defcls		int32
+	debug		const[0, int32]
+	direct_pkts	const[0, int32]
+}
+
+tc_netem_qopt {
+	latency		int32
+	limit		int32
+	loss		int32
+	gap		int32
+	duplicate	int32
+	jitter		int32
+}
+
+tc_netem_corr {
+	delay_corr	int32
+	loss_corr	int32
+	dup_corr	int32
+}
+
+tc_netem_reorder {
+	probability	int32
+	correlation	int32
+}
+
+tc_netem_corrupt {
+	probability	int32
+	correlation	int32
+}
+
+tc_netem_rate {
+	rate		int32
+	packet_overhead	int32
+	cell_size	int32
+	cell_overhead	int32
+}
+
+tc_netem_slot {
+	min_delay	int64
+	max_delay	int64
+	max_packets	int32
+	max_bytes	int32
+	dist_delay	int64
+	dist_jitter	int64
+}
+
+tc_netem_gimodel {
+	p13	int32
+	p31	int32
+	p32	int32
+	p14	int32
+	p23	int32
+}
+
+tc_netem_gemodel {
+	p	int32
+	r	int32
+	h	int32
+	k1	int32
+}
+
+tc_prio_qopt {
+	bands	int32
+	priomap	array[int8, TC_PRIO_MAX1]
+}
+
+define TC_PRIO_MAX1	TC_PRIO_MAX + 1
+
+tc_sfb_qopt {
+	rehash_interval	int32
+	warmup_time	int32
+	max		int32
+	bin_size	int32
+	increment	int32
+	decrement	int32
+	limit		int32
+	penalty_rate	int32
+	penalty_burst	int32
+}
+
+tc_sfq_qopt_v1 {
+	v0		tc_sfq_qopt
+	depth		int32
+	headdrop	int32[0:1]
+	limit		int32
+	qth_min		int32
+	qth_max		int32
+	Wlog		int8[0:32]
+	Plog		int8[0:32]
+	Scell_log	int8[0:32]
+	flag		int8[0:8]
+	max_P		int32
+	stats		tc_sfqred_stats
+}
+
+tc_sfq_qopt {
+	quantum		int32
+	perturb_period	int32
+	limit		int32
+	divisor		int32
+	flows		int32
+}
+
+tc_sfqred_stats {
+	prob_drop		int32
+	forced_drop		int32
+	prob_mark		int32
+	forced_mark		int32
+	prob_mark_head		int32
+	forced_mark_head	int32
+}
+
+tc_tbf_qopt {
+	rate		tc_ratespec
+	peakrate	tc_ratespec
+	limit		int32
+	buffer		int32
+	mtu		int32[0:9000]
+}
+
+# ------------------------------ tc class ------------------------------
+
+drr_policy [
+	TCA_DRR_QUANTUM	nlattr[TCA_DRR_QUANTUM, int32]
+] [varlen]
+
+htb_policy$class [
+	TCA_HTB_PARMS	nlattr[TCA_HTB_PARMS, tc_htb_opt]
+	TCA_HTB_CTAB	nlattr[TCA_HTB_CTAB, array[int32, 256]]
+	TCA_HTB_RTAB	nlattr[TCA_HTB_RTAB, array[int32, 256]]
+	TCA_HTB_RATE64	nlattr[TCA_HTB_RATE64, int64]
+	TCA_HTB_CEIL64	nlattr[TCA_HTB_CEIL64, int64]
+	TCA_HTB_OFFLOAD	nlattr[TCA_HTB_OFFLOAD, void]
+] [varlen]
+
+qfq_policy [
+	TCA_QFQ_WEIGHT	nlattr[TCA_QFQ_WEIGHT, int32]
+	TCA_QFQ_LMAX	nlattr[TCA_QFQ_LMAX, int32]
+] [varlen]
+
+tc_htb_opt {
+	rate	tc_ratespec
+	ceil	tc_ratespec
+	buffer	int32
+	cbuffer	int32
+	quantum	int32
+	level	int32
+	prio	int32
+}
+
+# ------------------------------ tc others ------------------------------
+tc_ratespec {
+	cell_log	int8
+	linklayer	flags[linklayer, int8]
+	overhead	int16
+	cell_align	int16
+	mpu		int16
+	rate		int32
+}
+
+tc_estimator {
+	interval	int8
+	ewma_log	int8
+}
+
+stab_policy {
+	TCA_STAB_BASE	nlattr[TCA_STAB_BASE, tc_sizespec]
+	TCA_STAB_DATA	nlattr[TCA_STAB_DATA, array[int16]]
+} [packed]
+
+tc_sizespec {
+	cell_log	int8
+	size_log	int8
+	cell_align	int16
+	overhead	int32
+	linklayer	flags[linklayer, int32]
+	mpu		int32
+	mtu		int32
+	tsize		len[stab_policy:TCA_STAB_DATA:payload, int32]
+}
+
+# ----------- flags -------------
+nf_inet_hooks = NF_INET_PRE_ROUTING, NF_INET_LOCAL_IN, NF_INET_FORWARD, NF_INET_LOCAL_OUT, NF_INET_POST_ROUTING
+
+linklayer = TC_LINKLAYER_UNAWARE, TC_LINKLAYER_ETHERNET, TC_LINKLAYER_ATM
+
+vlan_proto = ETH_P_8021Q, ETH_P_8021AD
+
+tc_cake_ack_filter = CAKE_ACK_NONE, CAKE_ACK_FILTER, CAKE_ACK_AGGRESSIVE
+tc_cake_atm = CAKE_ATM_NONE, CAKE_ATM_ATM, CAKE_ATM_PTM
+tc_cake_diffserv_mode = CAKE_DIFFSERV_DIFFSERV3, CAKE_DIFFSERV_DIFFSERV4, CAKE_DIFFSERV_DIFFSERV8, CAKE_DIFFSERV_BESTEFFORT, CAKE_DIFFSERV_PRECEDENCE
+tc_cake_flow_mode = CAKE_FLOW_NONE, CAKE_FLOW_SRC_IP, CAKE_FLOW_DST_IP, CAKE_FLOW_HOSTS, CAKE_FLOW_FLOWS, CAKE_FLOW_DUAL_SRC, CAKE_FLOW_DUAL_DST, CAKE_FLOW_TRIPLE
+
+
