@@ -56,12 +56,54 @@ resource handle_class_prio[int64]
 resource handle_class_qfq[int64]
 
 
+syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [in, list_addqdisc], size len[opts])
+
+syz_addclass(handle_port ptr[in, list_classqdisc], opts ptr [in, list_addclass], size len[opts])
+
 
 syz_delqdisc(handle ptr[in, list_del_qdisc])
 
 syz_delclass(handle ptr[in, list_del_class])
 
 
+syz_sendprio(handle ptr[in, list_sendprio])
+
+# list for parent handle addqdic and opts
+list_parent [
+	q_cbs  	handle_qdisc_cbs
+	q_netem handle_qdisc_netem
+	q_red 	handle_qdisc_red
+	q_sfb 	handle_qdisc_sfb
+	q_tbf 	handle_qdisc_tbf
+	q_drr 	handle_qdisc_drr
+	q_ets 	handle_qdisc_ets
+	q_hfsc 	handle_qdisc_hfsc
+	q_htb 	handle_qdisc_htb
+	q_prio 	handle_qdisc_prio
+	q_qfq 	handle_qdisc_qfq	
+]
+
+list_addqdisc [
+	
+]
+
+# add class port list and addclass opts
+list_classqdisc [
+	q_drr 	handle_qdisc_drr
+	q_ets 	handle_qdisc_ets
+	q_hfsc 	handle_qdisc_hfsc
+	q_htb 	handle_qdisc_htb
+	q_prio 	handle_qdisc_prio
+	q_qfq 	handle_qdisc_qfq	
+]
+
+list_addclass [
+	
+]
+
+
+
+# del lists qdisc and class
 list_del_qdisc [
 	q_cake 	handle_qdisc_cake
 	q_cbs  	handle_qdisc_cbs
@@ -83,6 +125,16 @@ list_del_class [
 	c_hfsc 	handle_class_hfsc
 	c_htb 	handle_class_htb
 	c_qfq 	handle_class_qfq
+]
+
+# list of class for send in priority
+list_sendprio [
+	c_drr  handle_class_drr
+	c_ets  handle_class_ets
+    c_hfsc handle_class_hfsc
+	c_htb  handle_class_htb
+	c_prio handle_class_prio
+	c_qfq  handle_class_qfq
 ]
 
 
