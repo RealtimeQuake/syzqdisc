@@ -60,6 +60,9 @@ syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [in, list_addqdisc], si
 
 syz_addclass(handle_port ptr[in, list_classqdisc], opts ptr [in, list_addclass], size len[opts])
 
+syz_changeqdisc(opts ptr[in, list_changeqdisc], size len[opts])
+
+syz_changeclass(opts ptr[in, list_changeclass], size len[ops])
 
 syz_delqdisc(handle ptr[in, list_del_qdisc])
 
@@ -101,7 +104,14 @@ list_addclass [
 	
 ]
 
+# change qdisc and class ops list
+list_changeqdisc [
+	
+]
 
+list_changeclass [
+	
+]
 
 # del lists qdisc and class
 list_del_qdisc [
