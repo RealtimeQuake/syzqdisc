@@ -198,15 +198,6 @@ enhanced_cbs_policy [
 	TCA_CBS_PARMS	nlattr[TCA_CBS_PARMS, enhanced_tc_cbs_qopt]
 ] [varlen]
 
-# TODO: we should not have TCA_GRED_PARMS and TCA_GRED_STAB when do init
-enhanced_gred_policy [
-	TCA_GRED_PARMS	nlattr[TCA_GRED_PARMS, enhanced_tc_gred_qopt]
-	TCA_GRED_STAB	nlattr[TCA_GRED_STAB, array[int8, 256]]
-	TCA_GRED_DPS	nlattr[TCA_GRED_DPS, enhanced_tc_gred_sopt]
-	TCA_GRED_MAX_P	nlattr[TCA_GRED_MAX_P, int32]
-	TCA_GRED_LIMIT	nlattr[TCA_GRED_LIMIT, int32]
-] [varlen]
-
 enhanced_hfsc_policy [
 	TCA_HFSC_RSC	nlattr[TCA_HFSC_RSC, enhanced_tc_service_curve]
 	TCA_HFSC_FSC	nlattr[TCA_HFSC_FSC, enhanced_tc_service_curve]
