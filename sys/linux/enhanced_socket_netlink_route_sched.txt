@@ -60,12 +60,12 @@ syz_addqdic_root(opts ptr [inout, list_addqdisc], size len[opts])
 
 syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [inout, list_addqdisc], size len[opts])
 
-syz_addclass_drr(	portid handle_qdisc_drr, 	class_num	int32[1:3], 	opts ptr[in, drr_policy], 					opts_size len[opts]) handle_class_drr
-syz_addclass_ets(	portid handle_qdisc_ets, 	class_num	int32[1:3],  	opts ptr[in, ets_policy$class], 			opts_size len[opts]) handle_class_ets
-syz_addclass_hfsc(	portid handle_qdisc_hfsc,	class_num	int32[1:3],  	opts ptr[in, array[hfsc_policy, 3]], 		opts_size len[opts]) handle_class_hfsc
-syz_addclass_htb(	portid handle_qdisc_htb,	class_num	int32[1:3],  	opts ptr[in, array[htb_policy$class, 6]], 	opts_size len[opts]) handle_class_htb
-syz_addclass_prio(	portid handle_qdisc_prio,	class_num 	int32[1:3], 	opts ptr[in, const[0, int64]],              opts_size len[opts]) handle_class_prio
-syz_addclass_qfq(	portid handle_qdisc_qfq,	class_num	int32[1:3], 	opts ptr[in, array[qfq_policy, 2]], 		opts_size len[opts]) handle_class_qfq
+syz_addclass_drr(	portid handle_qdisc_drr, 	class_num	int32[1:2], 	opts ptr[in, drr_policy], 					opts_size len[opts]) handle_class_drr
+syz_addclass_ets(	portid handle_qdisc_ets, 	class_num	int32[1:2],  	opts ptr[in, ets_policy$class], 			opts_size len[opts]) handle_class_ets
+syz_addclass_hfsc(	portid handle_qdisc_hfsc,	class_num	int32[1:2],  	opts ptr[in, array[hfsc_policy, 3]], 		opts_size len[opts]) handle_class_hfsc
+syz_addclass_htb(	portid handle_qdisc_htb,	class_num	int32[1:2],  	opts ptr[in, array[htb_policy$class, 6]], 	opts_size len[opts]) handle_class_htb
+syz_addclass_prio(	portid handle_qdisc_prio,	class_num 	int32[1:2], 	opts ptr[in, const[0, int64]],              opts_size len[opts]) handle_class_prio
+syz_addclass_qfq(	portid handle_qdisc_qfq,	class_num	int32[1:2], 	opts ptr[in, array[qfq_policy, 2]], 		opts_size len[opts]) handle_class_qfq
 
 
 syz_changeqdisc(opts ptr[in, list_changeqdisc], size len[opts])
