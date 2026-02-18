@@ -61,10 +61,10 @@ syz_addqdic_root(opts ptr [inout, list_addqdisc], size bytesize[opts])
 syz_addqdic(handle_parent ptr[in, list_parent], opts ptr [inout, list_addqdisc], size bytesize[opts])
 
 syz_addclass_drr(	portid handle_qdisc_drr, 	class_num	int32[1:2], 	opts ptr[in, enh_drr_policy], 					opts_size bytesize[opts]) handle_class_drr
-syz_addclass_ets(	portid handle_qdisc_ets, 	class_num	int32[1:2],  	opts ptr[in, enh_ets_policy$class], 			opts_size bytesize[opts]) handle_class_ets
+syz_addclass_ets(	portid handle_qdisc_ets, 	class_num	int32[1:2],  	opts const[0, int64], 							opts_size bytesize[opts]) handle_class_ets
 syz_addclass_hfsc(	portid handle_qdisc_hfsc,	class_num	int32[1:2],  	opts ptr[in, array[enh_hfsc_policy, 3]], 		opts_size bytesize[opts]) handle_class_hfsc
 syz_addclass_htb(	portid handle_qdisc_htb,	class_num	int32[1:2],  	opts ptr[in, array[enh_htb_policy$class, 6]], 	opts_size bytesize[opts]) handle_class_htb
-syz_addclass_prio(	portid handle_qdisc_prio,	class_num 	int32[1:2], 	opts ptr[in, const[0, int64]],              	opts_size bytesize[opts]) handle_class_prio
+syz_addclass_prio(	portid handle_qdisc_prio,	class_num 	int32[1:2], 	opts const[0, int64],              				opts_size bytesize[opts]) handle_class_prio
 syz_addclass_qfq(	portid handle_qdisc_qfq,	class_num	int32[1:2], 	opts ptr[in, array[enh_qfq_policy, 2]], 		opts_size bytesize[opts]) handle_class_qfq
 
 
