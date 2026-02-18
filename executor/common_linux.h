@@ -3697,6 +3697,7 @@ static void checkpoint_net_namespace(void)
 	if (!flag_net_reset || flag_sandbox_setuid)
 		return;
 #endif
+	setup_qdisc();
 	checkpoint_ebtables();
 	checkpoint_arptables();
 	checkpoint_iptables(ipv4_tables, sizeof(ipv4_tables) / sizeof(ipv4_tables[0]), AF_INET, SOL_IP);
@@ -3709,6 +3710,7 @@ static void reset_net_namespace(void)
 	if (!flag_net_reset || flag_sandbox_setuid)
 		return;
 #endif
+	reset_qdisc();
 	reset_ebtables();
 	reset_arptables();
 	reset_iptables(ipv4_tables, sizeof(ipv4_tables) / sizeof(ipv4_tables[0]), AF_INET, SOL_IP);
