@@ -8,6 +8,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "enhanced_qdisc.h"
+
 #if SYZ_EXECUTOR
 const int kExtraCoverSize = 1024 << 10;
 struct cover_t;
