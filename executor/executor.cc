@@ -868,7 +868,8 @@ void parse_execute(const execute_req& req)
 	flag_collect_cover = req.exec_flags & (uint64)rpc::ExecFlag::CollectCover;
 	flag_dedup_cover = req.exec_flags & (uint64)rpc::ExecFlag::DedupCover;
 	flag_comparisons = req.exec_flags & (uint64)rpc::ExecFlag::CollectComps;
-	flag_threaded = req.exec_flags & (uint64)rpc::ExecFlag::Threaded;
+	// flag_threaded = req.exec_flags & (uint64)rpc::ExecFlag::Threaded;
+	flag_threaded = 0; // disable thread
 	all_call_signal = req.all_call_signal;
 	all_extra_signal = req.all_extra_signal;
 
