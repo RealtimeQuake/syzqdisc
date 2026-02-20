@@ -56,9 +56,31 @@ resource handle_class_prio[int64]
 resource handle_class_qfq[int64]
 
 
-syz_addqdisc_root(opts ptr [inout, list_addqdisc], size bytesize[opts])
+syz_addqdisc_root_cbs(		opts ptr[in, enh_cbs_policy],             opts_size bytesize[opts]) handle_qdisc_cbs
+syz_addqdisc_root_netem( 	opts ptr[in, enh_tc_netem_message],       opts_size bytesize[opts]) handle_qdisc_netem
+syz_addqdisc_root_red(      opts ptr[in, array[enh_red_policy, 6]],   opts_size bytesize[opts]) handle_qdisc_red
+syz_addqdisc_root_sfb(      opts ptr[in, enh_sfb_policy],             opts_size bytesize[opts]) handle_qdisc_sfb
+syz_addqdisc_root_tbf(      opts ptr[in, array[enh_tbf_policy, 7]],   opts_size bytesize[opts]) handle_qdisc_tbf
+syz_addqdisc_root_drr(      opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_drr
+syz_addqdisc_root_ets(      opts ptr[in, array[enh_ets_policy, 4]],   opts_size bytesize[opts]) handle_qdisc_ets
+syz_addqdisc_root_hfsc(     opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_hfsc
+syz_addqdisc_root_htb(      opts ptr[in, array[enh_htb_policy, 3]],   opts_size bytesize[opts]) handle_qdisc_htb
+syz_addqdisc_root_prio(     opts ptr[in, enh_tc_prio_qopt],           opts_size bytesize[opts]) handle_qdisc_prio
+syz_addqdisc_root_qfq(      opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_qfq
 
-syz_addqdisc(handle_parent ptr[in, list_parent], opts ptr [inout, list_addqdisc], size bytesize[opts])
+syz_addqdisc_cake(	clid ptr[in, list_parent], opts ptr[in, array[enh_cake_policy, 17]], opts_size bytesize[opts]) handle_qdisc_cake
+syz_addqdisc_cbs(	clid ptr[in, list_parent], opts ptr[in, enh_cbs_policy], 			 opts_size bytesize[opts]) handle_qdisc_cbs
+syz_addqdisc_netem(	clid ptr[in, list_parent], opts ptr[in, enh_tc_netem_message], 		 opts_size bytesize[opts]) handle_qdisc_netem
+syz_addqdisc_red(	clid ptr[in, list_parent], opts ptr[in, array[enh_red_policy, 6]], 	 opts_size bytesize[opts]) handle_qdisc_red
+syz_addqdisc_sfb(	clid ptr[in, list_parent], opts ptr[in, enh_sfb_policy], 			 opts_size bytesize[opts]) handle_qdisc_sfb
+syz_addqdisc_tbf(	clid ptr[in, list_parent], opts ptr[in, array[enh_tbf_policy, 7]], 	 opts_size bytesize[opts]) handle_qdisc_tbf
+syz_addqdisc_drr(	clid ptr[in, list_parent], opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_drr
+syz_addqdisc_ets(	clid ptr[in, list_parent], opts ptr[in, array[enh_ets_policy, 4]], 	 opts_size bytesize[opts]) handle_qdisc_ets
+syz_addqdisc_hfsc(	clid ptr[in, list_parent], opts ptr[in, const[0, int64]], 		     opts_size bytesize[opts]) handle_qdisc_hfsc
+syz_addqdisc_htb(	clid ptr[in, list_parent], opts ptr[in, array[enh_htb_policy, 3]], 	 opts_size bytesize[opts]) handle_qdisc_htb
+syz_addqdisc_prio(	clid ptr[in, list_parent], opts ptr[in, enh_tc_prio_qopt], 			 opts_size bytesize[opts]) handle_qdisc_prio
+syz_addqdisc_qfq(	clid ptr[in, list_parent], opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_qfq
+
 
 syz_addclass_drr(	portid handle_qdisc_drr, 	class_num	int32[1:2], 	opts ptr[in, enh_drr_policy], 					opts_size bytesize[opts]) handle_class_drr
 syz_addclass_ets(	portid handle_qdisc_ets, 	class_num	int32[1:2],  	opts ptr[in, const[0, int64]], 					opts_size bytesize[opts]) handle_class_ets
@@ -68,17 +90,46 @@ syz_addclass_prio(	portid handle_qdisc_prio,	class_num 	int32[1:2], 	opts ptr[in
 syz_addclass_qfq(	portid handle_qdisc_qfq,	class_num	int32[1:2], 	opts ptr[in, array[enh_qfq_policy, 2]], 		opts_size bytesize[opts]) handle_class_qfq
 
 
-syz_changeqdisc(opts ptr[in, list_changeqdisc], size bytesize[opts])
+syz_changeqdisc_cake(	qdisc handle_qdisc_cake, 	opts ptr[in, array[enh_cake_policy, 17]],	opts_size bytesize[opts])
+syz_changeqdisc_cbs(	qdisc handle_qdisc_cbs, 	opts ptr[in, enh_cbs_policy],				opts_size bytesize[opts])
+syz_changeqdisc_netem(	qdisc handle_qdisc_netem, 	opts ptr[in, enh_tc_netem_message], 		opts_size bytesize[opts])
+syz_changeqdisc_red(	qdisc handle_qdisc_red, 	opts ptr[in, array[enh_red_policy, 6]], 	opts_size bytesize[opts])
+syz_changeqdisc_sfb(	qdisc handle_qdisc_sfb, 	opts ptr[in, enh_sfb_policy], 				opts_size bytesize[opts])
+syz_changeqdisc_tbf(	qdisc handle_qdisc_tbf, 	opts ptr[in, array[enh_tbf_policy, 7]], 	opts_size bytesize[opts])
+syz_changeqdisc_ets(	qdisc handle_qdisc_ets, 	opts ptr[in, array[enh_ets_policy, 4]], 	opts_size bytesize[opts])
+syz_changeqdisc_prio(	qdisc handle_qdisc_prio, 	opts ptr[in, enh_tc_prio_qopt], 			opts_size bytesize[opts])
 
-syz_changeclass(opts ptr[in, list_changeclass], size bytesize[opts])
+syz_changeclass_drr(	class handle_class_drr,		opts ptr[in, drr_policy], 					opts_size bytesize[opts])
+syz_changeclass_hfsc(	class handle_class_hfsc, 	opts ptr[in, array[enh_hfsc_policy, 3]], 		opts_size bytesize[opts])
+syz_changeclass_htb(	class handle_class_htb, 	opts ptr[in, array[enh_htb_policy$class, 6]], 	opts_size bytesize[opts])
+syz_changeclass_qfq(	class handle_class_qfq, 	opts ptr[in, array[enh_qfq_policy, 2]], 		opts_size bytesize[opts])
+syz_changeclass_ets(	class handle_class_ets, 	opts ptr[in, enh_ets_policy$class], 			opts_size bytesize[opts])
 
 
-syz_delqdisc(handle ptr[in, list_del_qdisc])
+syz_delqdisc_cake( 	handle handle_qdisc_cake)
+syz_delqdisc_cbs(  	handle handle_qdisc_cbs)
+syz_delqdisc_netem(	handle handle_qdisc_netem)
+syz_delqdisc_red(  	handle handle_qdisc_red)
+syz_delqdisc_sfb( 	handle handle_qdisc_sfb)
+syz_delqdisc_tbf(  	handle handle_qdisc_tbf)
+syz_delqdisc_drr( 	handle handle_qdisc_drr)
+syz_delqdisc_ets(  	handle handle_qdisc_ets)
+syz_delqdisc_hfsc( 	handle handle_qdisc_hfsc)
+syz_delqdisc_htb(  	handle handle_qdisc_htb)
+syz_delqdisc_prio( 	handle handle_qdisc_prio)
+syz_delqdisc_qfq(	handle handle_qdisc_qfq)
 
-syz_delclass(handle ptr[in, list_del_class])
+syz_delclass_drr(	handle handle_class_drr)
+syz_delclass_hfsc(	handle handle_class_hfsc)
+syz_delclass_htb(	handle handle_class_htb)
+syz_delclass_qfq(	handle handle_class_qfq)
 
-
-syz_sendprio(handle ptr[in, list_sendprio], count int32[1:3], size int32[1:1000])
+syz_sendprio_drr(	handle handle_class_drr, 	count int32[1:3], size int32[1:1000])
+syz_sendprio_ets(	handle handle_class_ets, 	count int32[1:3], size int32[1:1000])
+syz_sendprio_hfsc(	handle handle_class_hfsc, 	count int32[1:3], size int32[1:1000])
+syz_sendprio_htb(	handle handle_class_htb, 	count int32[1:3], size int32[1:1000])
+syz_sendprio_prio(	handle handle_class_prio, 	count int32[1:3], size int32[1:1000])
+syz_sendprio_qfq(	handle handle_class_qfq, 	count int32[1:3], size int32[1:1000])
 
 # list for parent handle addqdic and opts
 list_parent [
@@ -94,98 +145,6 @@ list_parent [
 	q_prio 	handle_class_prio
 	q_qfq 	handle_class_qfq	
 ]
-
-#using struct and random select for bypass union produce resource limitations
-list_addqdisc {
-	q_random 	int64[1:12]
-	q_cake  	addqdisc_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enh_cake_policy, 17]] 	(if[value[q_random] == 1])
-	q_cbs  	 	addqdisc_opt_t[Q_CBS, 	handle_qdisc_cbs, 	enh_cbs_policy]					(if[value[q_random] == 2])
-	q_netem		addqdisc_opt_t[Q_NETEM,	handle_qdisc_netem, enh_tc_netem_message]			(if[value[q_random] == 3])
-	q_red		addqdisc_opt_t[Q_RED,	handle_qdisc_red,	array[enh_red_policy, 6]]		(if[value[q_random] == 4])
-	q_sfb   	addqdisc_opt_t[Q_SFB,	handle_qdisc_sfb,   enh_sfb_policy]					(if[value[q_random] == 5])
-	q_tbf       addqdisc_opt_t[Q_TBF,   handle_qdisc_tbf, 	array[enh_tbf_policy, 7]]		(if[value[q_random] == 6])
-	q_drr       addqdisc_opt_t[Q_DRR,	handle_qdisc_drr,   const[0, int64]]				(if[value[q_random] == 7])
-	q_ets 		addqdisc_opt_t[Q_ETS,	handle_qdisc_ets,	array[enh_ets_policy, 4]]		(if[value[q_random] == 8])
-	q_hfsc		addqdisc_opt_t[Q_HFSC,  handle_qdisc_hfsc,  const[0, int64]]				(if[value[q_random] == 9])
-	q_htb		addqdisc_opt_t[Q_HTB,	handle_qdisc_htb,	array[enh_htb_policy, 3]]		(if[value[q_random] == 10])
-	q_prio		addqdisc_opt_t[Q_PRIO,  handle_qdisc_prio,  enh_tc_prio_qopt]				(if[value[q_random] == 11])
-	q_qfq		addqdisc_opt_t[Q_QFQ,	handle_qdisc_qfq,	const[0, int64]] 				(if[value[q_random] == 12])
-	q_error     const[0, int64]
-} [packed, align[8]] 
-
-type addqdisc_opt_t[TYPE, HANDLE, OPTS] {
-	q_type const[TYPE, int64]
-	handle HANDLE (out)
-	opts   OPTS
-}
-
-# change qdisc and class ops list
-list_changeqdisc [
-	q_cake  change_opt_t[Q_CAKE, 	handle_qdisc_cake, 	array[enh_cake_policy, 17]]
-	q_cbs 	change_opt_t[Q_CBS,  	handle_qdisc_cbs,  	enh_cbs_policy]
-	q_netem change_opt_t[Q_NETEM,	handle_qdisc_netem, enh_tc_netem_message]
-	q_red   change_opt_t[Q_RED, 	handle_qdisc_red,	array[enh_red_policy, 6]]
-	q_sfb   change_opt_t[Q_SFB,		handle_qdisc_sfb,	enh_sfb_policy]
-	q_tbf   change_opt_t[Q_TBF,		handle_qdisc_tbf,   array[enh_tbf_policy, 7]]
-	q_ets   change_opt_t[Q_ETS,		handle_qdisc_ets,	array[enh_ets_policy, 4]]
-	q_prio  change_opt_t[Q_PRIO,    handle_qdisc_prio,  enh_tc_prio_qopt]
-] [varlen]
-
-list_changeclass [
-	c_drr 	change_opt_t[Q_DRR,	 handle_class_drr,	enh_drr_policy]
-	c_ets 	change_opt_t[Q_ETS,	 handle_class_ets, 	enh_ets_policy$class]
-	c_hfsc	change_opt_t[Q_HFSC, handle_class_hfsc, array[enh_hfsc_policy, 3]]
-	c_htb   change_opt_t[Q_HTB,	 handle_class_htb,  array[enh_htb_policy$class, 6]]
-	c_qfq   change_opt_t[Q_QFQ,  handle_class_qfq,  array[enh_qfq_policy, 2]]
-] [varlen]
-
-type change_opt_t[TYPE, HANDLE, OPTS] {
-	q_type const[TYPE, int64]
-	handle HANDLE (in)
-	opts   OPTS
-}
-
-# del lists qdisc and class
-list_del_qdisc [
-	q_cake 	handle_qdisc_cake
-	q_cbs  	handle_qdisc_cbs
-	q_netem handle_qdisc_netem
-	q_red 	handle_qdisc_red
-	q_sfb 	handle_qdisc_sfb
-	q_tbf 	handle_qdisc_tbf
-	q_drr 	handle_qdisc_drr
-	q_ets 	handle_qdisc_ets
-	q_hfsc 	handle_qdisc_hfsc
-	q_htb 	handle_qdisc_htb
-	q_prio 	handle_qdisc_prio
-	q_qfq 	handle_qdisc_qfq	
-]
-
-# prio and ets is not delable
-list_del_class [
-	c_drr 	handle_class_drr
-	c_hfsc 	handle_class_hfsc
-	c_htb 	handle_class_htb
-	c_qfq 	handle_class_qfq
-]
-
-
-# list of class and halfclass for send in priority
-list_sendprio [
-	q_cbs  	handle_qdisc_cbs
-	q_netem handle_qdisc_netem
-	q_red 	handle_qdisc_red
-	q_sfb 	handle_qdisc_sfb
-	q_tbf 	handle_qdisc_tbf
-	c_drr   handle_class_drr
-	c_ets   handle_class_ets
-    c_hfsc  handle_class_hfsc
-	c_htb   handle_class_htb
-	c_prio  handle_class_prio
-	c_qfq   handle_class_qfq
-]
-
-
 
 # ------------------------------ tc qdisc ------------------------------
 
