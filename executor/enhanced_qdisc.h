@@ -8,7 +8,7 @@ static long syz_addqdisc_root_##name(volatile long opts, volatile long size)\
 #define MACRO_SYZ_ADDQDISC(type, name)                                                       \
 static long syz_addqdisc_##name(volatile long parent, volatile long opts, volatile long size)\
 {                                                                                            \
-        return pseudo_addqdisc(type, *(long*) parent, opts, size);                                          \
+        return pseudo_addqdisc(type, parent, opts, size);                                          \
 }                                                                                            \
 
 
