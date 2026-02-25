@@ -97,12 +97,6 @@ syz_changeqdisc_tbf(	qdisc handle_qdisc_tbf, 	opts ptr[in, array[enh_tbf_policy,
 syz_changeqdisc_ets(	qdisc handle_qdisc_ets, 	opts ptr[in, array[enh_ets_policy, 4]], 	opts_size bytesize[opts])
 syz_changeqdisc_prio(	qdisc handle_qdisc_prio, 	opts ptr[in, enh_tc_prio_qopt], 			opts_size bytesize[opts])
 
-syz_changeclass_drr(	class handle_class_drr,		opts ptr[in, drr_policy], 					opts_size bytesize[opts])
-syz_changeclass_hfsc(	class handle_class_hfsc, 	opts ptr[in, array[enh_hfsc_policy, 3]], 		opts_size bytesize[opts])
-syz_changeclass_htb(	class handle_class_htb, 	opts ptr[in, array[enh_htb_policy$class, 6]], 	opts_size bytesize[opts])
-syz_changeclass_qfq(	class handle_class_qfq, 	opts ptr[in, array[enh_qfq_policy, 2]], 		opts_size bytesize[opts])
-syz_changeclass_ets(	class handle_class_ets, 	opts ptr[in, enh_ets_policy$class], 			opts_size bytesize[opts])
-
 syz_delqdisc(handle handle_qdisc)
 
 syz_delclass(handle handle_class)
