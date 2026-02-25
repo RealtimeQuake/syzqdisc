@@ -107,18 +107,9 @@ var linuxSyscallChecks = map[string]func(*checkContext, *prog.Syscall) string{
 	"syz_pidfd_open":                alwaysSupported,
 	"syz_create_resource":           alwaysSupported,
 	"syz_kfuzztest_run":             alwaysSupported,
-	"syz_addqdisc_root":		 alwaysSupported,
-	"syz_addqdisc":			 alwaysSupported,
-	"syz_addclass_drr":		 alwaysSupported,
-	"syz_addclass_ets":		 alwaysSupported,
-	"syz_addclass_hfsc":		 alwaysSupported,
-	"syz_addclass_htb":		 alwaysSupported,
-	"syz_addclass_prio":		 alwaysSupported,
-	"syz_addclass_qfq":		 alwaysSupported,
-	"syz_changeqdisc":		 alwaysSupported,
-	"syz_changeclass":		 alwaysSupported,
-	"syz_delqdisc":			 alwaysSupported,
-	"syz_delclass":			 alwaysSupported,
+	"syz_addqdisc_root_netem":		 alwaysSupported,
+	"syz_addqdisc_root_cake":		 alwaysSupported,
+	"syz_addqdisc_root_tbf":		 alwaysSupported,
 }
 
 func linuxSyzOpenDevSupported(ctx *checkContext, call *prog.Syscall) string {
