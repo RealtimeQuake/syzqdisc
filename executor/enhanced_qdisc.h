@@ -2,7 +2,7 @@
 #define MACRO_SYZ_ADDQDISC_ROOT(type, name)                                 \
 static long syz_addqdisc_root_##name(volatile long opts, volatile long size)\
 {                                                                           \
-        return pseudo_addqdisc(type, (long) &ROOT_ID, opts, size);                        \
+        return pseudo_addqdisc(type, ROOT_ID, opts, size);                        \
 }                                                                           \
 
 #define MACRO_SYZ_ADDQDISC(type, name)                                                       \
