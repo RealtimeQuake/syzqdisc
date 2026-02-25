@@ -108,11 +108,6 @@ var linuxSyscallChecks = map[string]func(*checkContext, *prog.Syscall) string{
 	"syz_create_resource":           alwaysSupported,
 	"syz_kfuzztest_run":             alwaysSupported,
 
-	"syz_addqdisc_root_cbs":	 alwaysSupported,
-	"syz_addqdisc_root_netem":	 alwaysSupported,
-	"syz_addqdisc_root_red":	 alwaysSupported,
-	"syz_addqdisc_root_sfb":	 alwaysSupported,
-	"syz_addqdisc_root_tbf":	 alwaysSupported,
 	"syz_addqdisc_root_drr":	 alwaysSupported,
 	"syz_addqdisc_root_ets":	 alwaysSupported,
 	"syz_addqdisc_root_hfsc":	 alwaysSupported,
@@ -155,30 +150,11 @@ var linuxSyscallChecks = map[string]func(*checkContext, *prog.Syscall) string{
 	"syz_changeclass_qfq":   	 alwaysSupported,
 	"syz_changeclass_ets":   	 alwaysSupported,
 
-	"syz_delqdisc_cake":     	 alwaysSupported,
-	"syz_delqdisc_cbs":      	 alwaysSupported,
-	"syz_delqdisc_netem":    	 alwaysSupported,
-	"syz_delqdisc_red":      	 alwaysSupported,
-	"syz_delqdisc_sfb":      	 alwaysSupported,
-	"syz_delqdisc_tbf":      	 alwaysSupported,
-	"syz_delqdisc_drr":      	 alwaysSupported,
-	"syz_delqdisc_ets":      	 alwaysSupported,
-	"syz_delqdisc_hfsc":     	 alwaysSupported,
-	"syz_delqdisc_htb":      	 alwaysSupported,
-	"syz_delqdisc_prio":     	 alwaysSupported,
-	"syz_delqdisc_qfq":      	 alwaysSupported,
+	"syz_delqdisc":		     	 alwaysSupported,
 
-	"syz_delclass_drr":      	 alwaysSupported,
-	"syz_delclass_hfsc":     	 alwaysSupported,
-	"syz_delclass_htb":      	 alwaysSupported,
-	"syz_delclass_qfq":      	 alwaysSupported,
+	"syz_delclass":		      	 alwaysSupported,
 
-	"syz_sendprio_drr":      	 alwaysSupported,
-	"syz_sendprio_ets":      	 alwaysSupported,
-	"syz_sendprio_hfsc":     	 alwaysSupported,
-	"syz_sendprio_htb":      	 alwaysSupported,
-	"syz_sendprio_prio":     	 alwaysSupported,
-	"syz_sendprio_qfq":      	 alwaysSupported,
+	"syz_sendprio":      		 alwaysSupported,
 }
 
 func linuxSyzOpenDevSupported(ctx *checkContext, call *prog.Syscall) string {
