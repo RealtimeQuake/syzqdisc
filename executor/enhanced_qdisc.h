@@ -100,10 +100,10 @@ extern "C" long pseudo_changeqdisc(volatile long arg_type, volatile long arg_han
 extern "C" long pseudo_delqdisc(volatile long arg_handle);
 
 extern "C" long pseudo_addclass(volatile long arg_type, volatile long arg_handle_port, volatile long arg_class_num, volatile long arg_opt, volatile long arg_opt_size);
-extern "C" long pseudo_changeclass(volatile long arg_type, volatile long arg_handle, volatile long arg_opt, volatile long arg_opt_size)
+extern "C" long pseudo_changeclass(volatile long arg_type, volatile long arg_handle, volatile long arg_opt, volatile long arg_opt_size);
 extern "C" long pseudo_delclass(volatile long arg_handle);
 
-extern "C" long pseudo_sendprio(volatile long arg_handle, volatile long count, volatile long size)
+extern "C" long pseudo_sendprio(volatile long arg_handle, volatile long count, volatile long size);
 
 const long ROOT_ID = 0xbeef000000ffff00;
 
