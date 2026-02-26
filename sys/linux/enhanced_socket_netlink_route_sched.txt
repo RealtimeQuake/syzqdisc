@@ -101,7 +101,7 @@ syz_delqdisc(handle handle_qdisc)
 
 syz_delclass(handle handle_class)
 
-syz_sendprio(handle handle_class, 	count int32[1:3], size int32[1:1000])
+syz_sendprio(handle handle_class, count int32[1:3], size int32[1:1000])
 
 # list for parent handle addqdic and opts
 list_parent [
