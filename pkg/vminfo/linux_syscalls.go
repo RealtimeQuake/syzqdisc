@@ -148,7 +148,12 @@ var linuxSyscallChecks = map[string]func(*checkContext, *prog.Syscall) string{
 
 	"syz_delclass":		      	 alwaysSupported,
 
-	"syz_sendprio":      		 alwaysSupported,
+	"syz_sendprio_drr":      	alwaysSupported,
+	"syz_sendprio_ets":      	alwaysSupported,
+	"syz_sendprio_hfsc":      	alwaysSupported,
+	"syz_sendprio_htb":      	alwaysSupported,
+	"syz_sendprio_prio":      	alwaysSupported,
+	"syz_sendprio_qfq":      	alwaysSupported,
 }
 
 func linuxSyzOpenDevSupported(ctx *checkContext, call *prog.Syscall) string {

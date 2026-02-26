@@ -101,22 +101,13 @@ syz_delqdisc(handle handle_qdisc)
 
 syz_delclass(handle handle_class)
 
-syz_sendprio(handle handle_class, count int32[1:3], size int32[1:1000])
+syz_sendprio_drr(       handle handle_class_drr,        count int32[1:3], size int32[1:1000])
+syz_sendprio_ets(       handle handle_class_ets,        count int32[1:3], size int32[1:1000])
+syz_sendprio_hfsc(      handle handle_class_hfsc,       count int32[1:3], size int32[1:1000])
+syz_sendprio_htb(       handle handle_class_htb,        count int32[1:3], size int32[1:1000])
+syz_sendprio_prio(      handle handle_class_prio,       count int32[1:3], size int32[1:1000])
+syz_sendprio_qfq(       handle handle_class_qfq,        count int32[1:3], size int32[1:1000])
 
-# list for parent handle addqdic and opts
-list_parent [
-	q_cbs  	handle_qdisc_cbs
-	q_netem handle_qdisc_netem
-	q_red 	handle_qdisc_red
-	q_sfb 	handle_qdisc_sfb
-	q_tbf 	handle_qdisc_tbf
-	q_drr 	handle_class_drr
-	q_ets 	handle_class_ets
-	q_hfsc 	handle_class_hfsc
-	q_htb 	handle_class_htb
-	q_prio 	handle_class_prio
-	q_qfq 	handle_class_qfq	
-]
 
 # ------------------------------ tc qdisc ------------------------------
 
@@ -340,10 +331,6 @@ enh_tc_tbf_qopt {
 
 enh_drr_policy [
 	TCA_DRR_QUANTUM	nlattr[TCA_DRR_QUANTUM, int32]
-] [varlen]
-
-enh_ets_policy$class [
-	TCA_ETS_QUANTA_BAND 	nlattr[TCA_ETS_QUANTA_BAND, int32]
 ] [varlen]
 
 enh_htb_policy$class [

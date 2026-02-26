@@ -26,7 +26,11 @@ static long syz_changeqdisc_##name(volatile long handle, volatile long opts, vol
         return pseudo_changeqdisc(type, handle, opts, size);                                          \
 }                                                                                               \
                                     
-                                                                              
+#define MACRO_SYZ_SENDPRIO(type, name)                                                        \
+static long syz_sendprio_##name(volatile long handle, volatile long count, volatile long size)\
+{                                                                                             \
+        return pseudo_sendprio(handle, count, size);                                          \
+}                                                                               
 
 
 enum qdisc_type {
@@ -133,6 +137,14 @@ MACRO_SYZ_CHANGEQDISC(Q_TBF, tbf)
 MACRO_SYZ_CHANGEQDISC(Q_ETS, ets)
 MACRO_SYZ_CHANGEQDISC(Q_PRIO, prio)
 
+MACRO_SYZ_SENDPRIO(Q_DRR, drr)
+MACRO_SYZ_SENDPRIO(Q_ETS, ets)
+MACRO_SYZ_SENDPRIO(Q_HFSC, hfsc)
+MACRO_SYZ_SENDPRIO(Q_HTB, htb)
+MACRO_SYZ_SENDPRIO(Q_PRIO, prio)
+MACRO_SYZ_SENDPRIO(Q_QFQ, qfq)
+
+
 
 static long syz_delqdisc(volatile long handle)
 {                                                       
@@ -143,9 +155,3 @@ static long syz_delclass(volatile long handle)
 {                                                       
         return pseudo_delclass(handle);                 
 }    
-
-static long syz_sendprio(volatile long handle, volatile long count, volatile long size)
-{                                                                                             
-        return pseudo_sendprio(handle, count, size);                                          
-}                                                                                             
-
