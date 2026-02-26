@@ -72,13 +72,6 @@ syz_addqdisc_netem(	clid handle_class, opts ptr[in, enh_tc_netem_message], 		 op
 syz_addqdisc_red(	clid handle_class, opts ptr[in, array[enh_red_policy, 6]], 	 opts_size bytesize[opts]) handle_qdisc_red
 syz_addqdisc_sfb(	clid handle_class, opts ptr[in, enh_sfb_policy], 			 opts_size bytesize[opts]) handle_qdisc_sfb
 syz_addqdisc_tbf(	clid handle_class, opts ptr[in, array[enh_tbf_policy, 7]], 	 opts_size bytesize[opts]) handle_qdisc_tbf
-syz_addqdisc_drr(	clid handle_class, opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_drr
-syz_addqdisc_ets(	clid handle_class, opts ptr[in, array[enh_ets_policy, 4]], 	 opts_size bytesize[opts]) handle_qdisc_ets
-syz_addqdisc_hfsc(	clid handle_class, opts ptr[in, const[0, int64]], 		     opts_size bytesize[opts]) handle_qdisc_hfsc
-syz_addqdisc_htb(	clid handle_class, opts ptr[in, array[enh_htb_policy, 3]], 	 opts_size bytesize[opts]) handle_qdisc_htb
-syz_addqdisc_prio(	clid handle_class, opts ptr[in, enh_tc_prio_qopt], 			 opts_size bytesize[opts]) handle_qdisc_prio
-syz_addqdisc_qfq(	clid handle_class, opts ptr[in, const[0, int64]],            opts_size bytesize[opts]) handle_qdisc_qfq
-
 
 syz_addclass_drr(	portid handle_qdisc_drr, 	class_num	int32[1:2], 	opts ptr[in, enh_drr_policy], 					opts_size bytesize[opts]) handle_class_drr
 syz_addclass_ets(	portid handle_qdisc_ets, 	class_num	int32[1:2],  	opts ptr[in, const[0, int64]], 					opts_size bytesize[opts]) handle_class_ets

@@ -121,12 +121,6 @@ var linuxSyscallChecks = map[string]func(*checkContext, *prog.Syscall) string{
 	"syz_addqdisc_red":   		 alwaysSupported,
 	"syz_addqdisc_sfb":   		 alwaysSupported,
 	"syz_addqdisc_tbf":   		 alwaysSupported,
-	"syz_addqdisc_drr":   		 alwaysSupported,
-	"syz_addqdisc_ets":   		 alwaysSupported,
-	"syz_addqdisc_hfsc": 		 alwaysSupported,
-	"syz_addqdisc_htb":   		 alwaysSupported,
-	"syz_addqdisc_prio":  		 alwaysSupported,
-	"syz_addqdisc_qfq":   		 alwaysSupported,
 
 	"syz_addclass_drr": 		 alwaysSupported,
 	"syz_addclass_ets":  		 alwaysSupported,
